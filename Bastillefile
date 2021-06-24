@@ -1,0 +1,14 @@
+PKG postfix
+
+CP usr /
+CP root /
+
+FSTAB	/usr/ports /usr/jails/db/usr/ports nullfs ro 0 0 
+FSTAB /var/mail/data /werzel/mail nullfs rw 0 0
+
+SYSRC mysql_enable=YES
+
+SERVICE postfix_enable=YES
+SERVICE sendmail_enable="NONE"
+
+CMD /root/bootstrap-wp.sh
