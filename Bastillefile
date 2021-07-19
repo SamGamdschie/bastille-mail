@@ -3,9 +3,9 @@ PKG postfix
 CP usr /
 CP root /
 
-FSTAB /usr/ports usr/ports nullfs ro 0 0 
-FSTAB /werzel/mail var/mail/data nullfs rw 0 0
-FSTAB /werzel/certificates www/certificates nullfs ro 0 0
+MOUNT /usr/ports usr/ports nullfs ro 0 0 
+MOUNT /werzel/mail var/mail nullfs rw 0 0
+MOUNT /werzel/certificates www/certificates nullfs ro 0 0
 
 
 
