@@ -1,4 +1,4 @@
-PKG postfix portmaster 
+PKG portmaster apache-solr rspamd dcc-dccd
 
 CP usr /
 CP root /
@@ -14,5 +14,13 @@ CMD /compile_packages.sh
 SYSRC postfix_enable=YES
 SYSRC sendmail_enable=NONE
 SYSRC dovecot_enable=YES
+SYSRC solr_enable=YES
+SYSRC rspamd_enable=YES
+SYSRC dccifd_enable=YES
 
+SERVICE sendmail onestop
 SERVICE postfix start
+SERVICE dovecot start
+SERVICE solr start
+SERVICE rspamd start
+SERVICE dccifd start
