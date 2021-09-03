@@ -1,4 +1,4 @@
-PKG postfix
+PKG postfix portmaster 
 
 CP usr /
 CP root /
@@ -7,51 +7,12 @@ MOUNT /usr/ports usr/ports nullfs ro 0 0
 MOUNT /werzel/mail var/mail nullfs rw 0 0
 MOUNT /werzel/certificates www/certificates nullfs ro 0 0
 
+RDR
 
-
-/usr/jails/basejail /usr/jails/admin/basejail nullfs ro 0 0                                                                                                                                                                                         
-/usr/jails/proxy/www/vhosts/ssl /usr/jails/admin/www/vhosts/ssl nullfs ro 0 0                                                                                                                                                                       
-/usr/ports          /usr/jails/admin/usr/ports nullfs ro 0 0                                                                                                                                                                                        
-/werzel/certificates /usr/jails/admin/www/certificates nullfs ro 0 0                                                                                                                                                                                
-/werzel/nginx_config /usr/jails/admin/www/config nullfs ro 0 0                                                                                                                                                                                      
-/usr/jails/basejail /usr/jails/db/basejail nullfs ro 0 0                                                                                                                                                                                            
-/usr/ports          /usr/jails/db/usr/ports nullfs ro 0 0                                                                                                                                                                                           
-/usr/ports          /usr/jails/mail/usr/ports nullfs ro 0 0                                                                                                                                                                                         
-/tmp/ccache         /usr/jails/mail/tmp/ccache nullfs rw 0 0                                                                                                                                                                                        
-/usr/jails/basejail   /usr/jails/letsencrypt/basejail nullfs ro 0 0                                                                                                                                                                                 
-/usr/ports            /usr/jails/letsencrypt/usr/ports nullfs ro 0 0                                                                                                                                                                                
-#/werzel/certificates  /usr/jails/letsencrypt/usr/local/etc/letsencrypt nullfs rw 0 0                                                                                                                                                               
-/werzel/certificates  /usr/jails/letsencrypt/var/db/acme/certs nullfs rw 0 0                                                                                                                                                                        
-/usr/jails/basejail    /usr/jails/mail/basejail nullfs ro 0 0                                                                                                                                                                                       
-/usr/jails/proxy/www/vhosts/ssl /usr/jails/mail/www/vhosts/ssl nullfs ro 0 0                                                                                                                                                                        
-/usr/ports            /usr/jails/mail/usr/ports nullfs ro 0 0                                                                                                                                                                                       
-/werzel/certificates  /usr/jails/mail/usr/local/etc/certificates nullfs ro 0 0                                                                                                                                                                      
-/usr/jails/basejail    /usr/jails/mailtest/basejail nullfs ro 0 0                                                                                                                                                                                   
-/usr/ports            /usr/jails/mailtest/usr/ports nullfs ro 0 0                                                                                                                                                                                   
-/werzel/certificates  /usr/jails/mailtest/usr/local/etc/certificates nullfs ro 0 0                                                                                                                                                                  
-/usr/jails/basejail /usr/jails/mailtest.int.werzel.de/basejail nullfs ro 0 0                                                                                                                                                                        
-/usr/jails/basejail  /usr/jails/proxy/basejail nullfs ro 0 0                                                                                                                                                                                        
-/usr/ports           /usr/jails/proxy/usr/ports nullfs ro 0 0                                                                                                                                                                                       
-/werzel/certificates /usr/jails/proxy/www/certificates nullfs ro 0 0                                                                                                                                                                                
-/werzel/nginx_config /usr/jails/proxy/www/config nullfs ro 0 0                                                                                                                                                                                      
-/usr/jails/basejail /usr/jails/ssl/basejail nullfs ro 0 0                                                                                                                                                                                           
-/usr/jails/proxy/www/vhosts/ssl /usr/jails/ssl/www/vhosts/ssl nullfs ro 0 0                                                                                                                                                                         
-/usr/ports          /usr/jails/ssl/usr/ports nullfs ro 0 0                                                                                                                                                                                          
-/werzel/certificates /usr/jails/ssl/www/certificates nullfs ro 0 0                                                                                                                                                                                  
-/werzel/nginx_config /usr/jails/ssl/www/config nullfs ro 0 0                                                                                                                                                                                        
-/usr/jails/basejail /usr/jails/vpn/basejail nullfs ro 0 0                                                                                                                                                                                           
-#/usr/jails/proxy/www/vhosts/ssl /usr/jails/vpn/www/vhosts/ssl nullfs ro 0 0                                                                                                                                                                        
-#/usr/local/etc/werzel-ca/keys /usr/jails/vpn/usr/local/etc/openvpn/keys nullfs ro 0 0                                                                                                                                                              
-/usr/ports          /usr/jails/vpn/usr/ports nullfs ro 0 0                                                                                                                                                                                          
-/werzel/certificates/live /usr/jails/vpn/usr/local/etc/openvpn/keys nullfs ro 0 0                                                                                                                                                                   
-/usr/jails/basejail /usr/jails/www/basejail nullfs ro 0 0                                                                                                                                                                                           
-/usr/ports          /usr/jails/www/usr/ports nullfs ro 0 0                                                                                                                                                                                          
-/werzel/certificates /usr/jails/www/www/certificates nullfs ro 0 0                                                                                                                                                                                  
-/werzel/nginx_config /usr/jails/www/www/config nullfs ro 0 0                    
+CMD /compile_packages.sh          
 
 SYSRC postfix_enable=YES
 SYSRC sendmail_enable=NONE
+SYSRC dovecot_enable=YES
 
 SERVICE postfix start
-
-CMD /root/bootstrap-wp.sh
