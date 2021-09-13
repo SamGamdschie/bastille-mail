@@ -8,15 +8,20 @@ MOUNT /werzel/mail var/mail nullfs rw 0 0
 MOUNT /werzel/certificates www/certificates nullfs ro 0 0
 MOUNT /werzel/server_config/clamav usr/local/etc/clamav nullfs ro 0 0
 MOUNT /werzel/server_config/dovecot usr/local/etc/dovecot nullfs ro 0 0
+MOUNT /werzel/server_config/mysql usr/local/etc/mysql nullfs ro 0 0
 MOUNT /werzel/server_config/redis usr/local/etc/redis nullfs ro 0 0
 MOUNT /werzel/server_config/rspamd usr/local/etc/rspamd  nullfs ro 0 0
 MOUNT /werzel/server_config/postfix usr/local/etc/postfix  nullfs ro 0 0
 MOUNT werzel/server_config/postfix-policyd-spf-python usr/local/etc/postfix-policyd-spf-python  nullfs ro 0 0
 
-RDR
+RDR tcp 25 25 
+RDR tcp 143 143 
+RDR tcp 465 465
+RDR tcp 587 587
+RDR tcp 993 993
 
 # Run script which changes Postfix and Dovecot to Port with MySQL support 
-CMD /compile_packages.sh          
+CMD /compile_packages.sh
 
 SYSRC postfix_enable=YES
 SYSRC sendmail_enable=NONE
