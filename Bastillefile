@@ -1,6 +1,5 @@
-PKG portmaster apache-solr rspamd redis dcc-dccd
+PKG portmaster apache-solr rspamd redis dcc-dccd postfix dovecot dovecot-pigeonhole
 
-CP usr /
 CP root /
 
 MOUNT /usr/ports usr/ports nullfs ro 0 0 
