@@ -1,17 +1,23 @@
 PKG zsh vim-console git-lite htop portmaster apache-solr rspamd redis dcc-dccd postfix dovecot dovecot-pigeonhole
 
 CP root /
+CMD mkdir -p /usr/local/etc/git_config/clamav
+CMD mkdir -p /usr/local/etc/git_config/dovecot
+CMD mkdir -p /usr/local/etc/git_config/redis
+CMD mkdir -p /usr/local/etc/git_config/rspamd
+CMD mkdir -p /usr/local/etc/git_config/postfix
+CMD mkdir -p /usr/local/etc/git_config/postfix-policyd-spf-python
+
 
 MOUNT /usr/ports usr/ports nullfs ro 0 0 
 MOUNT /werzel/mail var/mail nullfs rw 0 0
 MOUNT /werzel/certificates www/certificates nullfs ro 0 0
-MOUNT /werzel/server_config/clamav usr/local/etc/clamav nullfs ro 0 0
-MOUNT /werzel/server_config/dovecot usr/local/etc/dovecot nullfs ro 0 0
-MOUNT /werzel/server_config/mysql usr/local/etc/mysql nullfs ro 0 0
-MOUNT /werzel/server_config/redis usr/local/etc/redis nullfs ro 0 0
-MOUNT /werzel/server_config/rspamd usr/local/etc/rspamd  nullfs ro 0 0
-MOUNT /werzel/server_config/postfix usr/local/etc/postfix  nullfs ro 0 0
-MOUNT werzel/server_config/postfix-policyd-spf-python usr/local/etc/postfix-policyd-spf-python  nullfs ro 0 0
+MOUNT /werzel/server_config/clamav usr/local/etc/git_config/clamav nullfs ro 0 0
+MOUNT /werzel/server_config/dovecot usr/local/etc/git_config/dovecot nullfs ro 0 0
+MOUNT /werzel/server_config/redis usr/local/etc/git_config/redis nullfs ro 0 0
+MOUNT /werzel/server_config/rspamd usr/local/etc/git_config/rspamd  nullfs ro 0 0
+MOUNT /werzel/server_config/postfix usr/local/etc/git_config/postfix  nullfs ro 0 0
+MOUNT werzel/server_config/postfix-policyd-spf-python usr/local/etc/git_config/postfix-policyd-spf-python  nullfs ro 0 0
 
 RDR tcp 25 25 
 RDR tcp 143 143 
