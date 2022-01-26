@@ -1,13 +1,14 @@
 PKG zsh vim-console git-lite htop portmaster apache-solr rspamd redis dcc-dccd postfix dovecot dovecot-pigeonhole
 
 CP root /
+CP etc /etc/
+
 CMD mkdir -p /usr/local/etc/git_config/clamav
 CMD mkdir -p /usr/local/etc/git_config/dovecot
 CMD mkdir -p /usr/local/etc/git_config/redis
 CMD mkdir -p /usr/local/etc/git_config/rspamd
 CMD mkdir -p /usr/local/etc/git_config/postfix
 CMD mkdir -p /usr/local/etc/git_config/postfix-policyd-spf-python
-
 
 MOUNT /usr/ports usr/ports nullfs ro 0 0 
 MOUNT /werzel/mail var/mail nullfs rw 0 0
