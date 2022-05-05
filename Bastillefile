@@ -3,7 +3,8 @@ PKG zsh vim-console git-lite htop portmaster apache-solr rspamd redis dcc-dccd p
 CP root /
 CP etc /
 
-#CMD mkdir -p /usr/local/etc/clamav
+CMD mkdir -p /www/certificates
+CMD mkdir -p /usr/local/etc/clamav
 CMD mkdir -p /usr/local/etc/dovecot
 CMD mkdir -p /usr/local/etc/redis
 CMD mkdir -p /usr/local/etc/rspamd/local.d
