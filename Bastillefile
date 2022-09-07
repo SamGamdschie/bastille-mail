@@ -4,22 +4,23 @@ CP root /
 CP etc /
 
 CMD mkdir -p /www/certificates
-CMD mkdir -p /usr/local/etc/clamav
-CMD mkdir -p /usr/local/etc/dovecot
-CMD mkdir -p /usr/local/etc/redis
-CMD mkdir -p /usr/local/etc/rspamd/local.d
-CMD mkdir -p /usr/local/etc/postfix
-CMD mkdir -p /usr/local/etc/postfix-policyd-spf-python
+CMD mkdir -p /usr/local/etc/git_config
+#CMD mkdir -p /usr/local/etc/dovecot
+#CMD mkdir -p /usr/local/etc/redis
+#CMD mkdir -p /usr/local/etc/rspamd/local.d
+#CMD mkdir -p /usr/local/etc/postfix
+#CMD mkdir -p /usr/local/etc/postfix-policyd-spf-python
 
 MOUNT /usr/ports usr/ports nullfs ro 0 0 
 MOUNT /werzel/mail var/mail nullfs rw 0 0
 MOUNT /werzel/certificates www/certificates nullfs ro 0 0
-MOUNT /werzel/server_config/clamav usr/local/etc/clamav nullfs ro 0 0
-MOUNT /werzel/server_config/dovecot usr/local/etc/dovecot nullfs ro 0 0
-MOUNT /werzel/server_config/redis usr/local/etc/redis nullfs ro 0 0
-MOUNT /werzel/server_config/rspamd/local.d usr/local/etc/rspamd/local.d  nullfs ro 0 0
-MOUNT /werzel/server_config/postfix usr/local/etc/postfix  nullfs ro 0 0
-MOUNT /werzel/server_config/postfix-policyd-spf-python usr/local/etc/postfix-policyd-spf-python  nullfs ro 0 0
+MOUNT /werzel/server_config usr/local/etc/git_config nullfs ro 0 0
+#MOUNT /werzel/server_config/clamav usr/local/etc/clamav nullfs ro 0 0
+#MOUNT /werzel/server_config/dovecot usr/local/etc/dovecot nullfs ro 0 0
+#MOUNT /werzel/server_config/redis usr/local/etc/redis nullfs ro 0 0
+#MOUNT /werzel/server_config/rspamd/local.d usr/local/etc/rspamd/local.d  nullfs ro 0 0
+#MOUNT /werzel/server_config/postfix usr/local/etc/postfix  nullfs ro 0 0
+#MOUNT /werzel/server_config/postfix-policyd-spf-python usr/local/etc/postfix-policyd-spf-python  nullfs ro 0 0
 
 RDR tcp 25 25 
 RDR tcp 143 143 
@@ -27,13 +28,23 @@ RDR tcp 465 465
 RDR tcp 587 587
 RDR tcp 993 993
 
-# Link Configurations from /usr/local/etc/ to /usr/local/etc/*/
-CMD rm -f /usr/local/etc/clamd.conf
-CMD rm -f /usr/local/etc/clamav-milter.conf
-CMD rm -f /usr/local/etc/redis.conf
-CMD ln -s /usr/local/etc/clamd.conf /usr/local/etc/clamav/clamd.conf
-CMD ln -s /usr/local/etc/clamav-milter.conf /usr/local/etc/clamav/clamav-milter.conf
-CMD ln -s /usr/local/etc/redis.conf /usr/local/etc/redis/redis.conf
+# Link Configurations to /usr/local/etc/ from /usr/local/etc/git_config/*/
+CMD rm -rf /usr/local/etc/clamd.conf
+CMD ln -s /usr/local/etc/clamd.conf /usr/local/etc/git_config/clamav/clamd.conf
+CMD rm -rf /usr/local/etc/clamav-milter.conf
+CMD ln -s /usr/local/etc/clamav-milter.conf /usr/local/etc/git_config/clamav/clamav-milter.conf
+CMD rm -rf /usr/local/etc/redis.conf
+CMD ln -s /usr/local/etc/redis.conf /usr/local/etc/git_config/redis/redis.conf
+CMD rm -rf /usr/local/etc/dovecot/
+CMD ln -s /usr/local/etc/dovecot /usr/local/etc/git_config/dovecot
+CMD rm -rf /usr/local/etc/rspamd/local.d/
+CMD ln -s /usr/local/etc/rspamd/local.d /usr/local/etc/git_config/rspamd/local.d
+CMD rm -rf /usr/local/etc/postfix/
+CMD ln -s /usr/local/etc/postfix /usr/local/etc/git_config/postfix
+CMD rm -rf /usr/local/etc/postfix-policyd-spf-python/
+CMD ln -s /usr/local/etc/postfix-policyd-spf-python /usr/local/etc/git_config/postfix-policyd-spf-python
+CMD rm -rf /usr/local/dcc/dcc_conf
+CMD ln -s /usr/local/dcc /usr/local/etc/git_config/dcc
 
 # Run script which changes Postfix and Dovecot to Port with MySQL support 
 CMD /root/compile_packages.sh
