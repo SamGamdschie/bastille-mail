@@ -49,6 +49,12 @@ CMD ln -s /usr/local/dcc /usr/local/etc/git_config/dcc
 # Run script which changes Postfix and Dovecot to Port with MySQL support 
 CMD /root/compile_packages.sh
 
+# Compile Sieve Rules etc. 
+CMD sievec /usr/local/etc/dovecot/sieve/report-spam.sieve
+CMD sievec /usr/local/etc/dovecot/sieve/sievec report-ham.sieve
+CMD chmod +x /usr/local/etc/dovecot/sieve/train-{spam,ham}.sh
+CMD sievec /usr/local/etc/dovecot/sieve-before.d/10-rspamd.sieve
+ 
 SYSRC postfix_enable=YES
 SYSRC sendmail_enable=NONE
 SYSRC dovecot_enable=YES
