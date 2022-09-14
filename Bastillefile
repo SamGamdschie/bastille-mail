@@ -1,4 +1,6 @@
-PKG zsh vim-console git-lite htop portmaster apache-solr rspamd redis dcc-dccd postfix dovecot dovecot-pigeonhole ca_root_nss
+#PKG zsh vim-console git-lite htop portmaster apache-solr rspamd redis dcc-dccd postfix dovecot dovecot-pigeonhole ca_root_nss
+
+PKG zsh vim-console git-lite htop portmaster rspamd dcc-dccd postfix dovecot dovecot-pigeonhole ca_root_nss
 
 CP root /
 CP etc /
@@ -29,12 +31,12 @@ RDR tcp 587 587
 RDR tcp 993 993
 
 # Link Configurations to /usr/local/etc/ from /usr/local/etc/git_config/*/
-CMD rm -rf /usr/local/etc/clamd.conf
-CMD ln -s /usr/local/etc/clamd.conf /usr/local/etc/git_config/clamav/clamd.conf
-CMD rm -rf /usr/local/etc/clamav-milter.conf
-CMD ln -s /usr/local/etc/clamav-milter.conf /usr/local/etc/git_config/clamav/clamav-milter.conf
-CMD rm -rf /usr/local/etc/redis.conf
-CMD ln -s /usr/local/etc/redis.conf /usr/local/etc/git_config/redis/redis.conf
+#CMD rm -rf /usr/local/etc/clamd.conf
+#CMD ln -s /usr/local/etc/clamd.conf /usr/local/etc/git_config/clamav/clamd.conf
+#CMD rm -rf /usr/local/etc/clamav-milter.conf
+#CMD ln -s /usr/local/etc/clamav-milter.conf /usr/local/etc/git_config/clamav/clamav-milter.conf
+#CMD rm -rf /usr/local/etc/redis.conf
+#CMD ln -s /usr/local/etc/redis.conf /usr/local/etc/git_config/redis/redis.conf
 CMD rm -rf /usr/local/etc/dovecot/
 CMD ln -s /usr/local/etc/dovecot /usr/local/etc/git_config/dovecot
 CMD rm -rf /usr/local/etc/rspamd/local.d/
@@ -58,15 +60,15 @@ CMD sievec /usr/local/etc/dovecot/sieve-before.d/10-rspamd.sieve
 SYSRC postfix_enable=YES
 SYSRC sendmail_enable=NONE
 SYSRC dovecot_enable=YES
-SYSRC solr_enable=YES
+#SYSRC solr_enable=YES
 SYSRC rspamd_enable=YES
-SYSRC redis_enable=YES
+#SYSRC redis_enable=YES
 SYSRC dccifd_enable=YES
 
 SERVICE sendmail onestop
 SERVICE postfix start
 SERVICE dovecot start
-SERVICE solr start
+#SERVICE solr start
 SERVICE rspamd start
-SERVICE redis start
+#SERVICE redis start
 SERVICE dccifd start
