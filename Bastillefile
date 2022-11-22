@@ -21,11 +21,8 @@ MOUNT /werzel/server_config/rspamd/local.d usr/local/etc/rspamd/local.d  nullfs 
 MOUNT /werzel/server_config/postfix usr/local/etc/postfix  nullfs ro 0 0
 MOUNT /werzel/server_config/postfix-policyd-spf-python usr/local/etc/postfix-policyd-spf-python  nullfs ro 0 0
 
-RDR tcp 25 25 
-RDR tcp 143 143 
-RDR tcp 465 465
-RDR tcp 587 587
-RDR tcp 993 993
+# Run script which changes Postfix and Dovecot to Port with MySQL support 
+CMD /root/compile_packages.sh
 
 # Link Configurations to /usr/local/etc/ from /usr/local/etc/git_config/*/
 CMD rm -rf /usr/local/etc/dovecot/
@@ -38,9 +35,6 @@ CMD rm -rf /usr/local/etc/postfix-policyd-spf-python/
 CMD ln -s /usr/local/etc/git_config/postfix-policyd-spf-python /usr/local/etc/postfix-policyd-spf-python
 CMD rm -rf /usr/local/dcc/dcc_conf
 CMD ln -s /usr/local/etc/git_config/dcc /usr/local/dcc
-
-# Run script which changes Postfix and Dovecot to Port with MySQL support 
-CMD /root/compile_packages.sh
 
 # Compile Sieve Rules etc. 
 CMD sievec /usr/local/etc/dovecot/sieve/report-spam.sieve
@@ -63,3 +57,10 @@ SERVICE dovecot start
 SERVICE rspamd start
 #SERVICE redis start
 SERVICE dccifd start
+
+# Now redirect mail traffic in jail
+RDR tcp 25 25 
+RDR tcp 143 143 
+RDR tcp 465 465
+RDR tcp 587 587
+RDR tcp 993 993

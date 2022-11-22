@@ -7,3 +7,5 @@ This is adapted to use MySQL/MariaDB as storage for username/password.
 
 For converting / backing up old server, see [DoveAdm - Backup](https://wiki.dovecot.org/Tools/Doveadm/Sync).
 
+### Indexing mailboxes
+After configuration and setup, start indexing all mailboxes using ```doveadm index -A inbox```.
