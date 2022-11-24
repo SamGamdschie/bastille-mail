@@ -1,13 +1,13 @@
-
+# Create and mount directories
 CMD mkdir -p /www/certificates
-CMD mkdir -p /usr/local/etc/git_config/dovecot_git
+CMD mkdir -p /usr/local/etc/git_config/dovecot
 CMD mkdir -p /usr/local/etc/git_config/rspamd/local.d
 CMD mkdir -p /usr/local/etc/git_config/postfix
 CMD mkdir -p /usr/local/etc/git_config/postfix-policyd-spf-python
 
 MOUNT /werzel/mail var/mail nullfs rw 0 0
 MOUNT /werzel/certificates www/certificates nullfs ro 0 0
-MOUNT /werzel/server_config/dovecot usr/local/etc/git_config/doveco nullfs ro 0 0
+MOUNT /werzel/server_config/dovecot usr/local/etc/git_config/dovecot nullfs ro 0 0
 MOUNT /werzel/server_config/rspamd/local.d usr/local/etc/git_config/rspamd/local.d nullfs ro 0 0
 MOUNT /werzel/server_config/postfix usr/local/etc/git_config/postfix nullfs ro 0 0
 MOUNT /werzel/server_config/postfix-policyd-spf-python usr/local/etc/git_config/postfix-policyd-spf-python  nullfs ro 0 0
@@ -19,12 +19,17 @@ PKG zsh htop portmaster rspamd postfix dovecot dovecot-pigeonhole ca_root_nss cu
 CP etc /
 CMD portsnap auto
 CMD pkg delete -fy postfix dovecot dovecot-pigeonhole rspamd
-CMD portmaster -y --no-confirm --packages-build --delete-build-only mail/postfix mail/dovecot mail/dovecot-pigeonhole mail/rspamd mail/dcc-dccd
+CMD portmaster --no-confirm --packages-build --delete-build-only mail/postfix mail/dovecot mail/dovecot-pigeonhole mail/rspamd mail/dcc-dccd
 CMD portmaster -y --clean-distfiles
 
-# Link Configurations to /usr/local/etc/ from /usr/local/etc/git_config/*/
+CMD mkdir -p /usr/local/etc/mail
+CMD install -m 0644 /usr/local/share/postfix/mailer.conf.postfix /usr/local/etc/mail/mailer.conf
+
+
+# Copy Dovecot Directory for compiling sieve rules (does not work in Read-only)
 CMD rm -rf /usr/local/etc/dovecot/
-CMD ln -s /usr/local/etc/git_config/dovecot /usr/local/etc/dovecot
+CMD cp -a /usr/local/etc/git_config/dovecot /usr/local/etc/dovecot
+# Link Configurations to /usr/local/etc/ from /usr/local/etc/git_config/*/
 CMD rm -rf /usr/local/etc/rspamd/local.d/
 CMD ln -s /usr/local/etc/git_config/rspamd/local.d /usr/local/etc/rspamd/local.d 
 CMD rm -rf /usr/local/etc/postfix/
@@ -36,7 +41,7 @@ CMD ln -s /usr/local/etc/git_config/dcc /usr/local/dcc
 
 # Compile Sieve Rules etc. 
 CMD sievec /usr/local/etc/dovecot/sieve/report-spam.sieve
-CMD sievec /usr/local/etc/dovecot/sieve/sievec report-ham.sieve
+CMD sievec /usr/local/etc/dovecot/sieve/report-ham.sieve
 CMD chmod +x /usr/local/etc/dovecot/sieve/train-{spam,ham}.sh
 CMD sievec /usr/local/etc/dovecot/sieve-before.d/10-rspamd.sieve
  
