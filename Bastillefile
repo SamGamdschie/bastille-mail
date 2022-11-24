@@ -1,6 +1,6 @@
 #PKG zsh vim-console git-lite htop portmaster apache-solr rspamd redis dcc-dccd postfix dovecot dovecot-pigeonhole ca_root_nss
 
-PKG zsh htop portmaster rspamd dcc-dccd postfix dovecot dovecot-pigeonhole ca_root_nss curl
+PKG zsh htop portmaster rspamd postfix dovecot dovecot-pigeonhole ca_root_nss curl
 
 # Compile packages with own options (MySQL)
 CP etc /
