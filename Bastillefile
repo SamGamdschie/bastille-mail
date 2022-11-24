@@ -1,9 +1,13 @@
 #PKG zsh vim-console git-lite htop portmaster apache-solr rspamd redis dcc-dccd postfix dovecot dovecot-pigeonhole ca_root_nss
 
-PKG zsh htop portmaster rspamd dcc-dccd postfix dovecot dovecot-pigeonhole ca_root_nss
+PKG zsh htop portmaster rspamd dcc-dccd postfix dovecot dovecot-pigeonhole ca_root_nss curl
 
-CP root /
+# Compile packages with own options (MySQL)
 CP etc /
+CMD portsnap auto 
+CMD pkg remove -f postfix dovecot dovecot-pigeonhole rspamd
+CMD portmaster --packages-build --delete-build-only mail/postfix mail/dovecot mail/dovecot-pigeonhole mail/rspamd mail/dcc-dccd
+CMD portmaster --clean-distfiles
 
 CMD mkdir -p /www/certificates
 #CMD mkdir -p /usr/local/etc/git_config
@@ -14,15 +18,11 @@ CMD mkdir -p /usr/local/etc/git_config/postfix-policyd-spf-python
 
 MOUNT /usr/ports usr/ports nullfs ro 0 0 
 MOUNT /werzel/mail var/mail nullfs rw 0 0
-#MOUNT /werzel/certificates www/certificates nullfs ro 0 0
-#MOUNT /werzel/server_config usr/local/etc/git_config nullfs ro 0 0
+MOUNT /werzel/certificates www/certificates nullfs ro 0 0
 MOUNT /werzel/server_config/dovecot usr/local/etc/dovecot nullfs ro 0 0
 MOUNT /werzel/server_config/rspamd/local.d usr/local/etc/rspamd/local.d  nullfs ro 0 0
 MOUNT /werzel/server_config/postfix usr/local/etc/postfix  nullfs ro 0 0
 MOUNT /werzel/server_config/postfix-policyd-spf-python usr/local/etc/postfix-policyd-spf-python  nullfs ro 0 0
-
-# Run script which changes Postfix and Dovecot to Port with MySQL support 
-CMD /root/compile_packages.sh
 
 # Link Configurations to /usr/local/etc/ from /usr/local/etc/git_config/*/
 CMD rm -rf /usr/local/etc/dovecot/
@@ -45,17 +45,13 @@ CMD sievec /usr/local/etc/dovecot/sieve-before.d/10-rspamd.sieve
 SYSRC postfix_enable=YES
 SYSRC sendmail_enable=NONE
 SYSRC dovecot_enable=YES
-#SYSRC solr_enable=YES
 SYSRC rspamd_enable=YES
-#SYSRC redis_enable=YES
 SYSRC dccifd_enable=YES
 
 SERVICE sendmail onestop
 SERVICE postfix start
 SERVICE dovecot start
-#SERVICE solr start
 SERVICE rspamd start
-#SERVICE redis start
 SERVICE dccifd start
 
 # Now redirect mail traffic in jail
