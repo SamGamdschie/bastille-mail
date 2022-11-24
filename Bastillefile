@@ -44,7 +44,7 @@ CMD sievec /usr/local/etc/dovecot/sieve/report-spam.sieve
 CMD sievec /usr/local/etc/dovecot/sieve/report-ham.sieve
 CMD chmod +x /usr/local/etc/dovecot/sieve/train-{spam,ham}.sh
 CMD sievec /usr/local/etc/dovecot/sieve-before.d/10-rspamd.sieve
- 
+
 SYSRC postfix_enable=YES
 SYSRC sendmail_enable=NONE
 SYSRC dovecot_enable=YES
