@@ -1,13 +1,3 @@
-#PKG zsh vim-console git-lite htop portmaster apache-solr rspamd redis dcc-dccd postfix dovecot dovecot-pigeonhole ca_root_nss
-
-PKG zsh htop portmaster rspamd postfix dovecot dovecot-pigeonhole ca_root_nss curl
-
-# Compile packages with own options (MySQL)
-CP etc /
-CMD portsnap auto 
-CMD pkg remove -f postfix dovecot dovecot-pigeonhole rspamd
-CMD portmaster --packages-build --delete-build-only mail/postfix mail/dovecot mail/dovecot-pigeonhole mail/rspamd mail/dcc-dccd
-CMD portmaster --clean-distfiles
 
 CMD mkdir -p /www/certificates
 #CMD mkdir -p /usr/local/etc/git_config
@@ -23,6 +13,16 @@ MOUNT /werzel/server_config/dovecot usr/local/etc/dovecot nullfs ro 0 0
 MOUNT /werzel/server_config/rspamd/local.d usr/local/etc/rspamd/local.d  nullfs ro 0 0
 MOUNT /werzel/server_config/postfix usr/local/etc/postfix  nullfs ro 0 0
 MOUNT /werzel/server_config/postfix-policyd-spf-python usr/local/etc/postfix-policyd-spf-python  nullfs ro 0 0
+
+# Install Packages
+PKG zsh htop portmaster rspamd postfix dovecot dovecot-pigeonhole ca_root_nss curl
+
+# Compile packages with own options (MySQL)
+CP etc /
+#CMD portsnap auto # Assumed to be up to data (same as host ports tree!)
+CMD pkg remove -f postfix dovecot dovecot-pigeonhole rspamd
+CMD portmaster --packages-build --delete-build-only mail/postfix mail/dovecot mail/dovecot-pigeonhole mail/rspamd mail/dcc-dccd
+CMD portmaster --clean-distfiles
 
 # Link Configurations to /usr/local/etc/ from /usr/local/etc/git_config/*/
 CMD rm -rf /usr/local/etc/dovecot/
