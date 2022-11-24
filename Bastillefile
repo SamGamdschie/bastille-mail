@@ -21,8 +21,8 @@ PKG zsh htop portmaster rspamd postfix dovecot dovecot-pigeonhole ca_root_nss cu
 CP etc /
 #CMD portsnap auto # Assumed to be up to data (same as host ports tree!)
 CMD pkg delete -fy postfix dovecot dovecot-pigeonhole rspamd
-CMD portmaster --packages-build --delete-build-only mail/postfix mail/dovecot mail/dovecot-pigeonhole mail/rspamd mail/dcc-dccd
-CMD portmaster --clean-distfiles
+CMD portmaster -y --no-confirm --packages-build --delete-build-only mail/postfix mail/dovecot mail/dovecot-pigeonhole mail/rspamd mail/dcc-dccd
+CMD portmaster -y --clean-distfiles
 
 # Link Configurations to /usr/local/etc/ from /usr/local/etc/git_config/*/
 CMD rm -rf /usr/local/etc/dovecot/
