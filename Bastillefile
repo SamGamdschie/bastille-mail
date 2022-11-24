@@ -1,7 +1,7 @@
 
 CMD mkdir -p /www/certificates
 #CMD mkdir -p /usr/local/etc/git_config
-CMD mkdir -p /usr/local/etc/git_config/dovecot
+CMD mkdir -p /usr/local/etc/git_config/dovecot_git
 CMD mkdir -p /usr/local/etc/git_config/rspamd/local.d
 CMD mkdir -p /usr/local/etc/git_config/postfix
 CMD mkdir -p /usr/local/etc/git_config/postfix-policyd-spf-python
@@ -9,10 +9,10 @@ CMD mkdir -p /usr/local/etc/git_config/postfix-policyd-spf-python
 MOUNT /usr/ports usr/ports nullfs ro 0 0 
 MOUNT /werzel/mail var/mail nullfs rw 0 0
 MOUNT /werzel/certificates www/certificates nullfs ro 0 0
-MOUNT /werzel/server_config/dovecot usr/local/etc/dovecot nullfs ro 0 0
-MOUNT /werzel/server_config/rspamd/local.d usr/local/etc/rspamd/local.d  nullfs ro 0 0
-MOUNT /werzel/server_config/postfix usr/local/etc/postfix  nullfs ro 0 0
-MOUNT /werzel/server_config/postfix-policyd-spf-python usr/local/etc/postfix-policyd-spf-python  nullfs ro 0 0
+MOUNT /werzel/server_config/dovecot usr/local/etc/git_config/doveco nullfs ro 0 0
+MOUNT /werzel/server_config/rspamd/local.d usr/local/etc/git_config/rspamd/local.d nullfs ro 0 0
+MOUNT /werzel/server_config/postfix usr/local/etc/git_config/postfix nullfs ro 0 0
+MOUNT /werzel/server_config/postfix-policyd-spf-python usr/local/etc/git_config/postfix-policyd-spf-python  nullfs ro 0 0
 
 # Install Packages
 PKG zsh htop portmaster rspamd postfix dovecot dovecot-pigeonhole ca_root_nss curl
