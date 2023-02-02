@@ -13,7 +13,7 @@ MOUNT /werzel/server_config/postfix usr/local/etc/git_config/postfix nullfs ro 0
 MOUNT /werzel/server_config/postfix-policyd-spf-python usr/local/etc/git_config/postfix-policyd-spf-python  nullfs ro 0 0
 
 # Install Packages
-PKG zsh htop portmaster rspamd postfix dovecot dovecot-pigeonhole ca_root_nss curl
+PKG zsh htop portmaster mariadb106-client rspamd postfix dovecot dovecot-pigeonhole ca_root_nss curl
 
 # Compile packages with own options (MySQL)
 CP etc /
@@ -24,6 +24,7 @@ CMD portmaster -y --clean-distfiles
 
 # Install mail
 CMD mkdir -p /usr/local/etc/mail
+CMD install -d /usr/local/etc/mail
 CMD install -m 0644 /usr/local/share/postfix/mailer.conf.postfix /usr/local/etc/mail/mailer.conf
 
 # Copy Dovecot Directory for compiling sieve rules (does not work in Read-only)
@@ -45,6 +46,15 @@ CMD sievec /usr/local/etc/dovecot/sieve/report-ham.sieve
 CMD chmod +x /usr/local/etc/dovecot/sieve/train-spam.sh
 CMD chmod +x /usr/local/etc/dovecot/sieve/train-ham.sh
 CMD sievec /usr/local/etc/dovecot/sieve-before.d/10-rspamd.sieve
+
+# Create User vmail with UID 145
+CMD pw useradd -u 145 -n vmail -c "Virtual Mail Handler" -d /var/mail/vhosts -s /usr/sbin/nologin
+CMD mkdir /var/mail/vhosts
+CMD mkdir /var/mail/attachments
+CMD chown vmail:vmail /var/mail/vhosts
+CMD chown vmail:vmail /var/mail/attachments
+CMD chmod 770 /var/mail/vhosts
+CMD chmod 770 /var/mail/attachments
 
 # Disable Sendmail
 SERVICE sendmail onestop
