@@ -22,6 +22,7 @@ CMD pkg delete -fy postfix dovecot dovecot-pigeonhole rspamd
 CMD portmaster --no-confirm --packages-build --delete-build-only mail/postfix mail/dovecot mail/dovecot-pigeonhole mail/rspamd mail/dcc-dccd
 CMD portmaster -y --clean-distfiles
 
+# Install mail
 CMD mkdir -p /usr/local/etc/mail
 CMD install -m 0644 /usr/local/share/postfix/mailer.conf.postfix /usr/local/etc/mail/mailer.conf
 
@@ -45,13 +46,18 @@ CMD sievec /usr/local/etc/dovecot/sieve/report-ham.sieve
 CMD chmod +x /usr/local/etc/dovecot/sieve/train-{spam,ham}.sh
 CMD sievec /usr/local/etc/dovecot/sieve-before.d/10-rspamd.sieve
 
+# Disable Sendmail
+SERVICE sendmail onestop
+SYSRC sendmail_enable=NO
+SYSRC sendmail_submit_enable=NO
+SYSRC sendmail_outbound_enable=NO
+SYSRC sendmail_msp_queue_enable=NO
+
+# Start the Services
 SYSRC postfix_enable=YES
-SYSRC sendmail_enable=NONE
 SYSRC dovecot_enable=YES
 SYSRC rspamd_enable=YES
 SYSRC dccifd_enable=YES
-
-SERVICE sendmail onestop
 SERVICE postfix start
 SERVICE dovecot start
 SERVICE rspamd start
