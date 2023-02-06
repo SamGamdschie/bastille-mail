@@ -29,8 +29,18 @@ CMD install -m 0644 /usr/local/share/postfix/mailer.conf.postfix /usr/local/etc/
 
 # Copy Dovecot Directory for compiling sieve rules (does not work in Read-only)
 CMD rm -rf /usr/local/etc/dovecot/
-CMD cp -a /usr/local/etc/git_config/dovecot /usr/local/etc/dovecot
-# Link Configurations to /usr/local/etc/ from /usr/local/etc/git_config/*/
+CMD mkdir -p /usr/local/etc/dovecot/sieve
+CMD cp -a /usr/local/etc/git_config/dovecot/sieve /usr/local/etc/dovecot/sieve
+CMD mkdir -p /usr/local/etc/dovecot/sieve-before.d
+CMD cp -a /usr/local/etc/git_config/dovecot/sieve-before.d /usr/local/etc/dovecot/sieve-before.d
+CMD mkdir -p /usr/local/etc/dovecot/sieve-pipe
+CMD cp -a /usr/local/etc/git_config/dovecot/sieve-pipe /usr/local/etc/dovecot/sieve-pipe
+# Now Dovecot Configuration as Link
+CMD ln -s /usr/local/etc/git_config/dovecot/conf.d /usr/local/etc/dovecot/conf.d 
+CMD ln -s /usr/local/etc/git_config/dovecot/dovecot.conf /usr/local/etc/dovecot/dovecot.conf 
+CMD ln -s /usr/local/etc/git_config/dovecot/sql.conf.ext /usr/local/etc/dovecot/sql.conf.ext
+
+# Link other Configurations to /usr/local/etc/ from /usr/local/etc/git_config/*/
 CMD rm -rf /usr/local/etc/rspamd/local.d/
 CMD ln -s /usr/local/etc/git_config/rspamd/local.d /usr/local/etc/rspamd/local.d 
 CMD rm -rf /usr/local/etc/postfix/
@@ -40,13 +50,6 @@ CMD ln -s /usr/local/etc/git_config/postfix-policyd-spf-python /usr/local/etc/po
 CMD rm -rf /usr/local/dcc/dcc_conf
 CMD ln -s /usr/local/etc/git_config/dcc /usr/local/dcc
 
-# Compile Sieve Rules etc. 
-CMD sievec /usr/local/etc/dovecot/sieve/report-spam.sieve
-CMD sievec /usr/local/etc/dovecot/sieve/report-ham.sieve
-CMD chmod +x /usr/local/etc/dovecot/sieve/train-spam.sh
-CMD chmod +x /usr/local/etc/dovecot/sieve/train-ham.sh
-CMD sievec /usr/local/etc/dovecot/sieve-before.d/10-rspamd.sieve
-
 # Create User vmail with UID 145
 CMD pw useradd -u 145 -n vmail -c "Virtual Mail Handler" -d /var/mail/vhosts -s /usr/sbin/nologin
 CMD mkdir /var/mail/vhosts
@@ -55,6 +58,16 @@ CMD chown vmail:vmail /var/mail/vhosts
 CMD chown vmail:vmail /var/mail/attachments
 CMD chmod 770 /var/mail/vhosts
 CMD chmod 770 /var/mail/attachments
+
+# Compile Sieve Rules etc. 
+CMD sievec /usr/local/etc/dovecot/sieve/report-spam.sieve
+CMD sievec /usr/local/etc/dovecot/sieve/report-ham.sieve
+CMD chown -R vmail:vmail /usr/local/etc/dovecot/sieve
+CMD chmod +x /usr/local/etc/dovecot/sieve/*.sh
+CMD chown -R vmail:vmail /usr/local/etc/dovecot/sieve-pipe
+CMD chmod +x /usr/local/etc/dovecot/sieve-pipe/*.sh
+CMD sievec /usr/local/etc/dovecot/sieve-before.d/10-rspamd.sieve
+CMD chown -R vmail:vmail /usr/local/etc/dovecot/sieve-before.d
 
 # Disable Sendmail
 SERVICE sendmail onestop
