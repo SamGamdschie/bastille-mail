@@ -15,8 +15,8 @@ MOUNT /werzel/server_config/postfix-policyd-spf-python usr/local/etc/git_config/
 # Install Packages
 CP etc /
 CMD portsnap auto
-PKG zsh htop portmaster 
-CMD portmaster -PP mariadb106-client rspamd postfix dovecot dovecot-pigeonhole ca_root_nss curl
+PKG zsh htop portmaster mariadb106-client
+CMD portmaster --no-confirm -P mail/rspamd mail/postfix mail/dovecot mail/dovecot-pigeonhole security/ca_root_nss ftp/curl
 
 # Compile packages with own options (MySQL)
 CMD pkg delete -fy postfix dovecot dovecot-pigeonhole rspamd
