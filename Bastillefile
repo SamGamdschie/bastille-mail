@@ -13,7 +13,8 @@ MOUNT /werzel/server_config/postfix usr/local/etc/git_config/postfix nullfs ro 0
 MOUNT /werzel/server_config/postfix-policyd-spf-python usr/local/etc/git_config/postfix-policyd-spf-python  nullfs ro 0 0
 
 # Install Packages
-PKG zsh htop portmaster mariadb106-client rspamd postfix dovecot dovecot-pigeonhole ca_root_nss curl
+PKG zsh htop portmaster 
+CMD portmaster -PP mariadb106-client rspamd postfix dovecot dovecot-pigeonhole ca_root_nss curl
 
 # Compile packages with own options (MySQL)
 CP etc /
@@ -43,8 +44,11 @@ CMD ln -s /usr/local/etc/git_config/dovecot/sql.conf.ext /usr/local/etc/dovecot/
 # Link other Configurations to /usr/local/etc/ from /usr/local/etc/git_config/*/
 CMD rm -rf /usr/local/etc/rspamd/local.d/
 CMD ln -s /usr/local/etc/git_config/rspamd/local.d /usr/local/etc/rspamd/local.d 
-CMD rm -rf /usr/local/etc/postfix/
-CMD ln -s /usr/local/etc/git_config/postfix /usr/local/etc/postfix
+CMD rm -rf /usr/local/etc/postfix/main.cf
+CMD ln -s /usr/local/etc/git_config/postfix/main.cf /usr/local/etc/postfix/main.cf
+CMD rm -rf /usr/local/etc/postfix/master.cf
+CMD ln -s /usr/local/etc/git_config/postfix/master.cf /usr/local/etc/postfix/master.cf
+CMD ln -s /usr/local/etc/git_config/postfix/mysql_cf /usr/local/etc/postfix/mysql_cf
 CMD rm -rf /usr/local/etc/postfix-policyd-spf-python/
 CMD ln -s /usr/local/etc/git_config/postfix-policyd-spf-python /usr/local/etc/postfix-policyd-spf-python
 CMD rm -rf /usr/local/dcc/dcc_conf
