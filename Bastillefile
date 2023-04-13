@@ -55,12 +55,12 @@ CMD rm -rf /usr/local/dcc/dcc_conf
 CMD ln -s /usr/local/etc/git_config/dcc /usr/local/dcc
 
 # Create User vmail with UID 145
-CMD pw useradd -u 145 -n vmail -c "Virtual Mail Handler" -d /var/mail/vhosts -s /usr/sbin/nologin
-CMD mkdir -p /var/mail/vhosts
+CMD pw useradd -u 145 -n vmail -c "Virtual Mail Handler" -d /var/mail/accounts -s /usr/sbin/nologin
+CMD mkdir -p /var/mail/accounts
 CMD mkdir -p /var/mail/attachments
-CMD chown vmail:vmail /var/mail/vhosts
+CMD chown vmail:vmail /var/mail/accounts
 CMD chown vmail:vmail /var/mail/attachments
-CMD chmod 770 /var/mail/vhosts
+CMD chmod 770 /var/mail/accounts
 CMD chmod 770 /var/mail/attachments
 
 # Compile Sieve Rules etc. 
