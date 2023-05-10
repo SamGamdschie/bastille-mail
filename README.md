@@ -7,6 +7,31 @@ This is adapted to use MySQL/MariaDB as storage for username/password.
 
 For converting / backing up old server, see [DoveAdm - Backup](https://wiki.dovecot.org/Tools/Doveadm/Sync).
 
+### DKIM / DMARC
+Generate your DKIM keys using rspamdadm
+```sh
+rspamadm dkim_keygen -k /var/db/rspamd/dkim/example.com.dkim.key -b 2048 -s dkim -d example.com
+```
+
+Now add the public key to your DNS:
+```
+dkim._domainkey IN TXT ( "v=DKIM1; k=rsa; "
+  "p=MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAzGdxkFW0tIDYdNrGyj/J2Hff7N/9BEWE2qxMw6PBW5FhJRullZT9WNZOVrrXk1TsiBHRq8YQrSS1TfLbNV9PE7sE0vGx0eLgkiqnqLMwTy5Y9+jEbiNrddNR6v+TGHuMckYJO3JMjiROhMi/86Lv6P/rv2R/lxFldCeYQxa41/8LH+b3ZXWTLYRM6y2/2UpGz/wtknvA+DtO0rn+Y"
+  "uLuPrh+ftzmJb6i3g01XFgAO8ZzMLMdO/k7UJDX/Q6himKxVv2t3vSvS1MGqiWThXiU3WxhQED0zZUlkC5Lfx4BCo1h0v7fwZeMdu2NPOzlDBMDq5HRYgbwuFXTAmxSM7WRqQIDAQAB"
+) ;
+```
+Now also give your policies regarding SPF and DKIM
+```
+_dmarc  IN  TXT  "v=DMARC1; p=reject; adkim=r; aspf=r; sp=reject"
+```
+Further reading in German: https://kb.mailbox.org/de/privat/e-mail-mit-eigener-domain/spam-reputation-der-eigenen-domain-verbessern-mit-spf-dkim-und-dmarc
+
+
+### Sync mailboxes with old server
+```sh
+imapsync --host1 xxx.xxx.de --user1 bla@wxxx.de --passfile1 ./password1 --authmech1 CRAM-MD5 --host2 10.0.0.10 --user2 xxx@blub.de --passfile2 ./password2
+```
+
 ### Indexing mailboxes
 After configuration and setup, start indexing all mailboxes using ```doveadm index -A inbox```.
 

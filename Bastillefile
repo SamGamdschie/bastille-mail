@@ -73,6 +73,9 @@ CMD chmod +x /usr/local/etc/dovecot/sieve-pipe/*.sh
 CMD sievec /usr/local/etc/dovecot/sieve-before.d/10-rspamd.sieve
 CMD chown -R vmail:vmail /usr/local/etc/dovecot/sieve-before.d
 
+# Compile Database
+CMD postalias /etc/aliases
+
 # Disable Sendmail
 SERVICE sendmail onestop
 SYSRC sendmail_enable=NO
@@ -90,9 +93,14 @@ SERVICE dovecot start
 SERVICE rspamd start
 SERVICE dccifd start
 
+# Install Postfix as standard MTA
+CMD mv /usr/local/etc/mail/mailer.conf /usr/local/etc/mail/mailer.conf.old
+CMD install -d /usr/local/etc/mail
+CMD install -m 0644 /usr/local/share/postfix/mailer.conf.postfix /usr/local/etc/mail/mailer.conf
+
 # Now redirect mail traffic in jail
 RDR tcp 25 25 
 RDR tcp 143 143 
-RDR tcp 465 465
+#RDR tcp 465 465
 RDR tcp 587 587
-RDR tcp 993 993
+#RDR tcp 993 993
