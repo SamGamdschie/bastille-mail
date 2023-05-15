@@ -5,7 +5,20 @@ BastilleBSD template for mail at WerzelServer
 The configuration is based on the guide at https://www.c0ffee.net/blog/mail-server-guide/ using Postfix, Dovecot, Rspamd, and Sieve for an up-to-date Mailserver.
 This is adapted to use MySQL/MariaDB as storage for username/password.
 
-For converting / backing up old server, see [DoveAdm - Backup](https://wiki.dovecot.org/Tools/Doveadm/Sync).
+### Configuration
+The template will mount the following host directories
+- /werzel/server_config/dovecot read-only
+- /werzel/server_config/rspamd/local.d read-only
+- /werzel/server_config/postfix read-only
+- /werzel/server_config/postfix-policyd-spf-python read-only
+- /werzel/mail
+- /werzel/certificates
+The first four directories are used to link specific files to certain config files in jail. Thus configuration can be changed from outside jail.
+Also, the TLS-certificates are used from /werzel/certificates using /www/certificates inside jail. This allows to use another jail to creat letsenrypt certificates.
+
+Additionally, the mail data directory /var/mail is mounted from host (read-write-mode) to be able use external / shared storage and backup techniques from outside jail.
+
+In future maybe some default configuration will be made available; currently tr to find out.
 
 ### DKIM / DMARC
 Generate your DKIM keys using rspamdadm
