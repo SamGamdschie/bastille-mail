@@ -23,7 +23,8 @@ In future maybe some default configuration will be made available; currently tr 
 ### DKIM / DMARC
 Generate your DKIM keys using rspamdadm
 ```sh
-rspamadm dkim_keygen -k /var/db/rspamd/dkim/example.com.dkim.key -b 2048 -s dkim -d example.com
+rspamadm dkim_keygen -k /var/db/rspamd/dkim/werzelmail.de.dkim.key -b 2048 -s dkim -d werzelmail.de
+rspamadm dkim_keygen -k /var/db/rspamd/dkim/werzelmail.de.eddsa.key -t ed25519 -s eddsa -d werzelmail.de
 ```
 
 Now add the public key to your DNS:
@@ -33,11 +34,14 @@ dkim._domainkey IN TXT ( "v=DKIM1; k=rsa; "
   "uLuPrh+ftzmJb6i3g01XFgAO8ZzMLMdO/k7UJDX/Q6himKxVv2t3vSvS1MGqiWThXiU3WxhQED0zZUlkC5Lfx4BCo1h0v7fwZeMdu2NPOzlDBMDq5HRYgbwuFXTAmxSM7WRqQIDAQAB"
 ) ;
 ```
-Now also give your policies regarding SPF and DKIM
+Now also give your policies regarding SPF and DKIM:
 ```
-_dmarc  IN  TXT  "v=DMARC1; p=reject; adkim=r; aspf=r; sp=reject"
+@  IN  TXT  "v=spf1 mx -all"``
 ```
-Further reading in German: https://kb.mailbox.org/de/privat/e-mail-mit-eigener-domain/spam-reputation-der-eigenen-domain-verbessern-mit-spf-dkim-und-dmarc
+```
+_dmarc  IN  TXT  "v=DMARC1; p=quarantine; adkim=r; aspf=r; sp=reject"
+```
+Further reading in German: https://kb.mailbox.org/de/privat/e-mail-mit-eigener-domain/spf-dkim-und-dmarc-spam-reputation-verbessern-und-bounces-vermeiden
 
 
 ### Sync mailboxes with old server

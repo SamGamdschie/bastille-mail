@@ -54,6 +54,10 @@ CMD ln -s /usr/local/etc/git_config/postfix-policyd-spf-python /usr/local/etc/po
 CMD rm -rf /usr/local/dcc/dcc_conf
 CMD ln -s /usr/local/etc/git_config/dcc /usr/local/dcc
 
+# Create directory for DKIM keys
+CMD mkdir -p /var/db/rspamd/dkim
+CMD chown rspamd:rspamd /var/db/rspamd/dkim
+
 # Create User vmail with UID 145
 CMD pw useradd -u 145 -n vmail -c "Virtual Mail Handler" -d /var/mail/accounts -s /usr/sbin/nologin
 CMD mkdir -p /var/mail/accounts
