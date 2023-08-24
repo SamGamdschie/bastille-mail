@@ -21,13 +21,13 @@ Additionally, the mail data directory /var/mail is mounted from host (read-write
 In future maybe some default configuration will be made available; currently tr to find out.
 
 ### DKIM / DMARC
-Generate your DKIM keys using rspamdadm
+Generate your DKIM keys using rspamdadm for RSA and ED25519:
 ```sh
-rspamadm dkim_keygen -k /var/db/rspamd/dkim/werzelmail.de.dkim.key -b 2048 -s dkim -d werzelmail.de
-rspamadm dkim_keygen -k /var/db/rspamd/dkim/werzelmail.de.eddsa.key -t ed25519 -s eddsa -d werzelmail.de
+rspamadm dkim_keygen -k /var/db/rspamd/dkim/example.com.dkim.key -b 2048 -s dkim -d example.com
+rspamadm dkim_keygen -k /var/db/rspamd/dkim/example.com.eddsa.key -t ed25519 -s eddsa -d example.com
 ```
 
-Now add the public key to your DNS:
+Now add the public keys to your DNS (for both RSA and ED25519):
 ```
 dkim._domainkey IN TXT ( "v=DKIM1; k=rsa; "
   "p=MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAzGdxkFW0tIDYdNrGyj/J2Hff7N/9BEWE2qxMw6PBW5FhJRullZT9WNZOVrrXk1TsiBHRq8YQrSS1TfLbNV9PE7sE0vGx0eLgkiqnqLMwTy5Y9+jEbiNrddNR6v+TGHuMckYJO3JMjiROhMi/86Lv6P/rv2R/lxFldCeYQxa41/8LH+b3ZXWTLYRM6y2/2UpGz/wtknvA+DtO0rn+Y"
@@ -38,9 +38,11 @@ Now also give your policies regarding SPF and DKIM:
 ```
 @  IN  TXT  "v=spf1 mx -all"``
 ```
+Choose your DMARC settings wisely.
 ```
-_dmarc  IN  TXT  "v=DMARC1; p=quarantine; adkim=r; aspf=r; sp=reject"
+_dmarc  IN  TXT  "v=DMARC1; p=quarantine; adkim=r; aspf=r; sp=reject; rua=mailto:mail@example.com"
 ```
+Always check your settings with tools like https://dkimvalidator.com !! Only if DKIM runs correctly, mails will be delivered. 
 Further reading in German: https://kb.mailbox.org/de/privat/e-mail-mit-eigener-domain/spf-dkim-und-dmarc-spam-reputation-verbessern-und-bounces-vermeiden
 
 
@@ -76,4 +78,3 @@ If you are using SASL, you need to make sure that postfix has access to read
 the sasldb file.  This is accomplished by adding postfix to group mail and
 making the /usr/local/etc/sasldb* file(s) readable by group mail (this should
 be the default for new installs).
-
