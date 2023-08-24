@@ -21,7 +21,8 @@ Additionally, the mail data directory /var/mail is mounted from host (read-write
 In future maybe some default configuration will be made available; currently tr to find out.
 
 ### DKIM / DMARC
-Generate your DKIM keys using rspamdadm for RSA and ED25519:
+Generate your DKIM keys using rspamdadm for RSA and ED25519.
+Note the "selector" ```-s```, which can also be used with date to allow updating the signing keys.
 ```sh
 rspamadm dkim_keygen -k /var/db/rspamd/dkim/example.com.dkim.key -b 2048 -s dkim -d example.com
 rspamadm dkim_keygen -k /var/db/rspamd/dkim/example.com.eddsa.key -t ed25519 -s eddsa -d example.com
@@ -36,11 +37,12 @@ dkim._domainkey IN TXT ( "v=DKIM1; k=rsa; "
 ```
 Now also give your policies regarding SPF and DKIM:
 ```
-@  IN  TXT  "v=spf1 mx -all"``
+@  IN  TXT  "v=spf1 mx ~all"``
 ```
-Choose your DMARC settings wisely.
+Choose your DMARC settings wisely. I recommend to start with ```p=none```, to allow checking the reports first. Later it can be set to either ```p=quarantine```or ```p=reject```.
 ```
-_dmarc  IN  TXT  "v=DMARC1; p=quarantine; adkim=r; aspf=r; sp=reject; rua=mailto:mail@example.com"
+_dmarc  IN  TXT  "v=DMARC1;p=none;rua=mailto:dmarc@example.com;pct=100;aspf=r;adkim=r;"
+
 ```
 Always check your settings with tools like https://dkimvalidator.com !! Only if DKIM runs correctly, mails will be delivered. 
 Further reading in German: https://kb.mailbox.org/de/privat/e-mail-mit-eigener-domain/spf-dkim-und-dmarc-spam-reputation-verbessern-und-bounces-vermeiden
