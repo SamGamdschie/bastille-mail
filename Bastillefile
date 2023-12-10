@@ -23,10 +23,15 @@ CMD pkg delete -fy postfix dovecot dovecot-pigeonhole rspamd
 CMD portmaster --no-confirm --packages-build --delete-build-only mail/postfix mail/dovecot mail/dovecot-pigeonhole mail/rspamd mail/dcc-dccd
 CMD portmaster -y --clean-distfiles
 
-# Install mail
+# Install postfix as defaul mail (instead of DMA 14+)
 CMD mkdir -p /usr/local/etc/mail
 CMD install -d /usr/local/etc/mail
 CMD install -m 0644 /usr/local/share/postfix/mailer.conf.postfix /usr/local/etc/mail/mailer.conf
+#Set periodic.conf to disable DMA
+CMD echo 'daily_clean_hoststat_enable="NO"' >> /etc/periodic.conf
+CMD echo 'daily_status_mail_rejects_enable="NO"' >> /etc/periodic.conf
+CMD echo 'daily_status_include_submit_mailq="NO"' >> /etc/periodic.conf
+CMD echo 'daily_submit_queuerun="NO"' >> /etc/periodic.conf
 
 # Copy Dovecot Directory for compiling sieve rules (does not work in Read-only)
 CMD rm -rf /usr/local/etc/dovecot/
@@ -80,12 +85,12 @@ CMD chown -R vmail:vmail /usr/local/etc/dovecot/sieve-before.d
 # Compile Database
 CMD postalias /etc/aliases
 
-# Disable Sendmail
-SERVICE sendmail onestop
-SYSRC sendmail_enable=NO
-SYSRC sendmail_submit_enable=NO
-SYSRC sendmail_outbound_enable=NO
-SYSRC sendmail_msp_queue_enable=NO
+# Disable Senmail (up to 13.x)
+#SERVICE sendmail onestop
+#SYSRC sendmail_enable=NO
+#SYSRC sendmail_submit_enable=NO
+#SYSRC sendmail_outbound_enable=NO
+#SYSRC sendmail_msp_queue_enable=NO
 
 # Start the Services
 SYSRC postfix_enable=YES
@@ -96,11 +101,6 @@ SERVICE postfix start
 SERVICE dovecot start
 SERVICE rspamd start
 SERVICE dccifd start
-
-# Install Postfix as standard MTA
-CMD mv /usr/local/etc/mail/mailer.conf /usr/local/etc/mail/mailer.conf.old
-CMD install -d /usr/local/etc/mail
-CMD install -m 0644 /usr/local/share/postfix/mailer.conf.postfix /usr/local/etc/mail/mailer.conf
 
 # Now redirect mail traffic in jail
 RDR tcp 25 25 
