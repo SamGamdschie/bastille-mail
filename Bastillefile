@@ -12,10 +12,10 @@ MOUNT /werzel/server_config/rspamd/local.d usr/local/etc/git_config/rspamd/local
 MOUNT /werzel/server_config/postfix usr/local/etc/git_config/postfix nullfs ro 0 0
 MOUNT /werzel/server_config/postfix-policyd-spf-python usr/local/etc/git_config/postfix-policyd-spf-python  nullfs ro 0 0
 
-# Install Packages
+# Install Packages and Portstree
 CP etc /
-CMD portsnap auto
-PKG zsh htop portmaster mariadb106-client
+PKG zsh htop portmaster mariadb106-client git
+git clone https://git.freebsd.org/ports.git /usr/ports
 CMD portmaster --no-confirm -P mail/rspamd mail/postfix mail/dovecot mail/dovecot-pigeonhole security/ca_root_nss ftp/curl
 
 # Compile packages with own options (MySQL)
