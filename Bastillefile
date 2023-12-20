@@ -14,7 +14,7 @@ MOUNT /werzel/server_config/postfix-policyd-spf-python usr/local/etc/git_config/
 
 # Install Packages and Portstree
 CP etc /
-PKG zsh htop portmaster mariadb106-client git
+PKG zsh htop portmaster mariadb1011-client git
 CMD git clone https://git.freebsd.org/ports.git /usr/ports
 CMD portmaster --no-confirm -P mail/rspamd mail/postfix mail/dovecot mail/dovecot-pigeonhole security/ca_root_nss ftp/curl
 
