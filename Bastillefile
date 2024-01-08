@@ -16,11 +16,11 @@ MOUNT /werzel/server_config/postfix-policyd-spf-python usr/local/etc/git_config/
 CP etc /
 PKG zsh htop portmaster mariadb1011-client git
 CMD git clone https://git.freebsd.org/ports.git /usr/ports
-CMD portmaster --no-confirm -P mail/rspamd mail/postfix mail/dovecot mail/dovecot-pigeonhole security/ca_root_nss ftp/curl
+CMD portmaster --no-confirm -PP mail/rspamd mail/postfix mail/dovecot mail/dovecot-pigeonhole security/ca_root_nss ftp/curl
 
 # Compile packages with own options (MySQL)
 CMD pkg delete -fy postfix dovecot dovecot-pigeonhole rspamd
-CMD portmaster --no-confirm --packages-build --delete-build-only mail/postfix mail/dovecot mail/dovecot-pigeonhole mail/rspamd mail/dcc-dccd
+CMD portmaster --no-confirm --packages-build --delete-build-only mail/postfix-mysql mail/dovecot mail/dovecot-pigeonhole mail/rspamd mail/dcc-dccd
 CMD portmaster -y --clean-distfiles
 
 # Install postfix as defaul mail (instead of DMA 14+)
@@ -60,7 +60,8 @@ CMD rm -rf /usr/local/dcc/dcc_conf
 CMD ln -s /usr/local/etc/git_config/dcc /usr/local/dcc
 
 # Create directory for DKIM keys
-CMD mkdir -p /var/db/rspamd/dkim
+CMD rm -rf /var/db/rspamd/dkim
+CMD ln -s /var/mail/dkim /var/db/rspamd/dkim
 CMD chown rspamd:rspamd /var/db/rspamd/dkim
 
 # Create User vmail with UID 145
@@ -104,7 +105,7 @@ SERVICE dccifd start
 
 # Now redirect mail traffic in jail
 RDR tcp 25 25 
-RDR tcp 143 143 
-#RDR tcp 465 465
 RDR tcp 587 587
-#RDR tcp 993 993
+# Use both 143 (imap) and 993 (imaps)
+RDR tcp 143 143 
+RDR tcp 993 993
