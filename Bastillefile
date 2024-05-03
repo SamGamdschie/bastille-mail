@@ -39,8 +39,6 @@ CMD mkdir -p /usr/local/etc/dovecot/sieve
 CMD cp -a /usr/local/etc/git_config/dovecot/sieve /usr/local/etc/dovecot/
 CMD mkdir -p /usr/local/etc/dovecot/sieve-before.d
 CMD cp -a /usr/local/etc/git_config/dovecot/sieve-before.d /usr/local/etc/dovecot/
-CMD mkdir -p /usr/local/etc/dovecot/sieve-pipe
-CMD cp -a /usr/local/etc/git_config/dovecot/sieve-pipe /usr/local/etc/dovecot/
 # Now Dovecot Configuration as Link
 CMD ln -s /usr/local/etc/git_config/dovecot/conf.d /usr/local/etc/dovecot/conf.d 
 CMD ln -s /usr/local/etc/git_config/dovecot/dovecot.conf /usr/local/etc/dovecot/dovecot.conf 
@@ -78,8 +76,6 @@ CMD sievec /usr/local/etc/dovecot/sieve/report-spam.sieve
 CMD sievec /usr/local/etc/dovecot/sieve/report-ham.sieve
 CMD chown -R vmail:vmail /usr/local/etc/dovecot/sieve
 CMD chmod +x /usr/local/etc/dovecot/sieve/*.sh
-CMD chown -R vmail:vmail /usr/local/etc/dovecot/sieve-pipe
-CMD chmod +x /usr/local/etc/dovecot/sieve-pipe/*.sh
 CMD sievec /usr/local/etc/dovecot/sieve-before.d/10-rspamd.sieve
 CMD chown -R vmail:vmail /usr/local/etc/dovecot/sieve-before.d
 
